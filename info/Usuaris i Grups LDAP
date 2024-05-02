@@ -1,0 +1,30 @@
+Usuaris:
+======================
+uidNumber=1002
+gidNumber=500
+fn=Aleix
+ln=Povedano
+cn=Aleix Povedano
+username=apovedano
+======================
+uidNumber=1001
+gidNumber=501
+fn=Joel
+ln=Orri
+cn=Joel Orri
+username=jorri
+======================
+uidNumber=1000
+gidNumber=501
+fn=Marc
+ln=Penas
+cn=Marc Penas
+username=mpenas
+
+Grups:
+======================
+gidNumber=500
+cn=administradors
+======================
+gidNumber=501
+cn=casuals
