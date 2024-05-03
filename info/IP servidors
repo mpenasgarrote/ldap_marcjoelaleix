@@ -1,8 +1,9 @@
 Ip servidor Ubuntu server projecte -- 
       Enp1s0 = Xarxa internet
-      Enp2s0 = 192.168.33.1 -- Xarxa per fer SSH
-      Enp3s0 = 192.168.100.100 -- Xarxa interna per comunicar amb LDAP PHP
+      Enp2s0 = 192.168.33.1 -- Xarxa per fer SSH/ cirvianum4
+      Enp3s0 = 192.168.100.100 -- Xarxa interna per comunicar amb LDAP PHP cirvianum5
 
 IP servidors Ubuntu server LDAP PHP
       Enp1s0 = Xarxa internet
-      Enp2s0 = 192.168.100.200 -- xarxa interna per comunicar amb APACHE
+      Enp2s0 = 192.168.33.2 -- Xarxa per fer SSH/ cirvianum4 //// per treure al final 
+      Enp3s0 = 192.168.100.200 -- xarxa interna per comunicar amb APACHE cirvianum5
