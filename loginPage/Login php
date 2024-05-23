@@ -3,12 +3,13 @@ $ldap_host = 'ldap://192.168.100.200';
 $ldap_port = 389;
 $ldap_base_dn = 'dc=pateratore,dc=org';
 $ldap_user_suffix = '@pateratore.org';
-$ldap_group_dn = 'cn=group500,dc=pateratore,dc=org';
+$ldap_group_dn = 'ou=Grups,dc=pateratore,dc=org';
+$ldap_user_dn = 'ou=Users,dc=pateratore,dc=org';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $introuser = htmlspecialchars($_POST['username']);
     $user = "cn=$introuser,ou=Users,$ldap_base_dn"; //htmlspecialchars($_POST['username']);
-    $password = "1234"; //htmlspecialchars($_POST['password']);
+    $password = htmlspecialchars($_POST['password']);
 
     $ldap_conn = ldap_connect($ldap_host, $ldap_port);
 
@@ -18,14 +19,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         $ldap_bind = @ldap_bind($ldap_conn, $user, $password);
 
+	// Buscar per usuari
+	$userFilter = "(sAMAccountName=$introuser)";
+	$userResult = ldap_search($ldap_conn, $ldap_user_dn, $userFilter);
+	$userEntry = ldap_first_entry($ldap_conn, $userResult);
+
+	// Grups
+	$groupAdministradors = "cn=administradors,$ldap_group_dn";
+	$groupCasuals = "cn=casuals,$ldap_group_dn";
+
         if ($ldap_bind) {
-            $is_in_group_500 = ldap_search($ldap_conn, $ldap_group_dn, "(member=$user)");
-            if ($is_in_group_500) {
-                header('Location: pagicm/zonaClients.html');
-                exit();
+            if ($userEntry) {
+                $groups = ldap_get_values($ldap_conn, $userEntry, 'memberof');
+		if ($groups) {
+			foreach ($groups as $group) {
+				if ($group === $groupAdministradors) {
+					header('Location: pagicm/zonaClients.html');
+			                exit();
+					break;
+				} elseif ($group === $groupCasuals) {
+					header('Location: pagicm/zonaPrivada.html');
+               				exit();
+			}
             } else {
-                header('Location: pagicm/zonaPrivada.html');
-                exit();
+		echo "User is not part of any group.";
             }
         } else {
             echo  "Invalid email or password.";
