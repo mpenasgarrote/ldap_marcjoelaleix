@@ -1,0 +1,42 @@
+.bar {
+    background-color: white;
+    height: 5em;
+    display: flex; 
+    justify-content: flex-end; 
+    align-items: center; 
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+.bar button {
+    border-radius: 10px;
+    height: 3em;
+    width: 5em;
+    background-color: black;
+    color: white;
+    margin-right: 7em; 
+    margin-left: 7em;
+}
+
+.mainBanner {
+    margin-top: 7em;
+    display: grid;
+    justify-content: center;
+    height: max-content;
+}
+
+.mainBanner h1 {
+    display: block;
+    text-align: center;
+}
+
+.content {
+    display: block;
+    text-align: center; 
+}
+
+body {
+    background-color: whitesmoke;
+}
