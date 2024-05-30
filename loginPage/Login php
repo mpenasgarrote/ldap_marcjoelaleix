@@ -8,7 +8,7 @@ $ldap_user_dn = 'ou=Users,dc=pateratore,dc=org';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $introuser = htmlspecialchars($_POST['username']);
-    $user = "cn=$introuser,ou=Users,$ldap_base_dn"; //htmlspecialchars($_POST['username']);
+    $user = "cn=$introuser,ou=Users,$ldap_base_dn";
     $password = htmlspecialchars($_POST['password']);
 
     $ldap_conn = ldap_connect($ldap_host, $ldap_port);
@@ -16,33 +16,39 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($ldap_conn) {
         ldap_set_option($ldap_conn, LDAP_OPT_PROTOCOL_VERSION, 3);
         ldap_set_option($ldap_conn, LDAP_OPT_REFERRALS, 0);
+        ldap_set_option($ldap_conn, LDAP_OPT_DEBUG_LEVEL, 7);
 
         $ldap_bind = @ldap_bind($ldap_conn, $user, $password);
 
-	// Buscar per usuari
-	$userFilter = "(sAMAccountName=$introuser)";
-	$userResult = ldap_search($ldap_conn, $ldap_user_dn, $userFilter);
-	$userEntry = ldap_first_entry($ldap_conn, $userResult);
+        // Buscar per usuari
 
-	// Grups
-	$groupAdministradors = "cn=administradors,$ldap_group_dn";
-	$groupCasuals = "cn=casuals,$ldap_group_dn";
+        $userFilter = "(sAMAccountName=$introuser)";
+        $userResult = ldap_search($ldap_conn, $ldap_user_dn, $userFilter);
+        $userEntry = ldap_first_entry($ldap_conn, $userResult);
+
+        // Grups
+        $groupAdministradors = "cn=administradors,$ldap_group_dn";
+        $groupCasuals = "cn=casuals,$ldap_group_dn";
 
         if ($ldap_bind) {
             if ($userEntry) {
                 $groups = ldap_get_values($ldap_conn, $userEntry, 'memberof');
-		if ($groups) {
-			foreach ($groups as $group) {
-				if ($group === $groupAdministradors) {
-					header('Location: pagicm/zonaClients.html');
-			                exit();
-					break;
-				} elseif ($group === $groupCasuals) {
-					header('Location: pagicm/zonaPrivada.html');
-               				exit();
-			}
+                if ($groups) {
+                        foreach ($groups as $group) {
+                                if ($group === $groupAdministradors) {
+                                        header('Location: pagines/paginaAdministradors.html');
+                                        //echo "Usuari adminisnistradors";
+                                        exit();
+                                        break;
+                                } elseif ($group === $groupCasuals) {
+                                        header('Location: pagines/paginaCasuals.html');
+                                        //echo "Usuari casuals
+                                        exit();
+                                }
+                        }
+                }
             } else {
-		echo "User is not part of any group.";
+                echo "User is not part of any group.";
             }
         } else {
             echo  "Invalid email or password.";
