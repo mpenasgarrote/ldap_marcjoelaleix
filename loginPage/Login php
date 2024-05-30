@@ -12,22 +12,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $password = htmlspecialchars($_POST['password']);
 
     $ldap_conn = ldap_connect($ldap_host, $ldap_port);
-
+    //Verificació de la conexio al servidor LDAP
     if ($ldap_conn) {
         ldap_set_option($ldap_conn, LDAP_OPT_PROTOCOL_VERSION, 3);
         ldap_set_option($ldap_conn, LDAP_OPT_REFERRALS, 0);
 
+        //Comprovació del usuari al LDAP
         $ldap_bind = @ldap_bind($ldap_conn, $user, $password);
 
-        // Buscar per usuari
+        // Buscar per usuari la seva informació
         $userFilter = "(&(objectCategory=$introuser))";
         $userResult = ldap_search($ldap_conn, $ldap_base_dn, $userFilter);
         $userEntry = ldap_first_entry($ldap_conn, $userResult);
 
-        // Grups
+        // Filtre de Grups
         $groupAdministradors = "cn=administradors,$ldap_group_dn";
         $groupCasuals = "cn=casuals,$ldap_group_dn";
-
+        
+        //Si la comprovació és correcte
         if ($ldap_bind) {
             //if (FALSE !== $userEntry) {
                // $groups = ldap_get_values($ldap_conn, $userEntry, 'memberof');
